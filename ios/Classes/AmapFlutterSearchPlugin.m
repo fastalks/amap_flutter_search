@@ -1,6 +1,7 @@
 #import "AmapFlutterSearchPlugin.h"
 #import <AMapSearchKit/AMapSearchKit.h>
 #import <AMapFoundationKit/AMapFoundationKit.h>
+#import <MJExtension/MJExtension.h>
 
 @interface AmapFlutterSearchPlugin ()<AMapSearchDelegate>
 
@@ -56,27 +57,29 @@
 /* POI 搜索回调. */
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response
 {
-    if (self.poiResult) {
-        self.poiResult(@"AMapPOISearchResponse");
-    }
-    return;
+
     if (response.pois.count == 0)
     {
         if (self.poiResult) {
-            self.poiResult(@"");
+            self.poiResult(@[]);
         }
         return;
     }
     
-    NSArray<AMapPOI *> *pois = response.pois;
-    NSError *error;
-    NSData *data = [NSJSONSerialization dataWithJSONObject:pois options:NSJSONWritingPrettyPrinted error:&error];
-    if (error) {
-        return;
-    }
-    NSString *json = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
+//    NSArray<AMapPOI *> *pois = response.pois;
+    ;
+//    NSError *error;
+//    NSData *data = [NSJSONSerialization dataWithJSONObject:pois options:NSJSONWritingPrettyPrinted error:&error];
+//    if (error) {
+//        if (self.poiResult) {
+//            self.poiResult(error.description);
+//        }
+//        return;
+//    }
+//    NSString *json = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
+    NSArray *pois = [NSArray mj_keyValuesArrayWithObjectArray:response.pois];
     if (self.poiResult) {
-        self.poiResult(json);
+        self.poiResult(pois);
     }
 }
 

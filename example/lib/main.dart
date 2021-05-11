@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    AMapFlutterLocation.setApiKey("xxxxxx", "xxxxxx");
+    AMapFlutterLocation.setApiKey("e300c95e81dbe1b40593ace788992973", "96a77571aa1af603ffbcec12a05bc0e4");
 
     initPlatformState();
   }
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
     }
     print(platformVersion);
     try {
-      String json = await AmapFlutterSearch.poiKeywords('海阳新村', '上海');
+      var json = await AmapFlutterSearch.poiKeywords('海阳新村', '上海');
       print("=============");
       print(json);
       print("=============");

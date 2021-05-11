@@ -11,9 +11,9 @@ class AmapFlutterSearch {
     return version;
   }
 
-  static Future<String> poiKeywords(String keywords, String city) async {
-    final String json = await _channel
+  static Future<List<dynamic>> poiKeywords(String keywords, String city) async {
+    final List<dynamic> pois = await _channel
         .invokeMethod('poiKeywords', {'keywords': keywords, 'city': city});
-    return json;
+    return pois;
   }
 }

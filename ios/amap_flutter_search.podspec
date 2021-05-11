@@ -17,7 +17,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'AMapSearch'
-  
+  s.dependency 'MJExtension'
   s.platform = :ios, '8.0'
 
   # Flutter.framework does not contain a i386 slice.
