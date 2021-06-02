@@ -1,6 +1,6 @@
 # amap_flutter_search
 
-A new flutter plugin project.
+基于高德开放平台地图SDK的flutter插件(社区版)
 
 ## Getting Started
 
