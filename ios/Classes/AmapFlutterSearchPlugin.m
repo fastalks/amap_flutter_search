@@ -6,8 +6,8 @@
 @interface AmapFlutterSearchPlugin ()<AMapSearchDelegate>
 
 @property (nonatomic, strong) AMapSearchAPI *searchAPI;
-@property (nonatomic, copy) FlutterResult poiResult;
-
+@property (nonatomic, copy) FlutterResult poiResult; //POI回调
+@property (nonatomic, copy) FlutterResult reGeoResult; //逆地理编码回调
 @end
 
 @implementation AmapFlutterSearchPlugin
@@ -27,20 +27,26 @@
       NSString *city = call.arguments[@"city"];
 
       if (!keywords || ![keywords isKindOfClass:[NSString class]]) {
-          result(@"keywords is not a string");
+          result(@[].mj_JSONString);
           return;
       }
       if (!city || ![city isKindOfClass:[NSString class]]) {
-          result(@"city is not a string");
+          result(@[].mj_JSONString);
           return;
       }
       self.poiResult = result;
       [self poiKeywords:keywords city:city];
+  }else if([@"reGoecodeSearch" isEqualToString:call.method]){
+      NSNumber *latitude = call.arguments[@"latitude"];
+      NSNumber *longitude = call.arguments[@"longitude"];
+      self.reGeoResult = result;
+      [self reGoecodeSearchWithLatitude:latitude.floatValue longitude:longitude.floatValue];
   } else {
     result(FlutterMethodNotImplemented);
   }
 }
 
+/* POI 搜索 */
 - (void)poiKeywords:(NSString*)keywords city:(NSString*)city{
     AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
     request.keywords            = keywords;
@@ -53,7 +59,15 @@
     [self.searchAPI AMapPOIKeywordsSearch:request];
 }
 
+/* 逆地理编码 */
+- (void)reGoecodeSearchWithLatitude:(CGFloat)latitude  longitude:(CGFloat)longitude{
+    AMapReGeocodeSearchRequest *request = [[AMapReGeocodeSearchRequest alloc] init];
+    request.location = [AMapGeoPoint locationWithLatitude:latitude longitude:longitude];
+    request.requireExtension    = YES;
+    [self.searchAPI AMapReGoecodeSearch:request];
+}
 
+#pragma mark - delegate
 /* POI 搜索回调. */
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response
 {
@@ -61,31 +75,30 @@
     if (response.pois.count == 0)
     {
         if (self.poiResult) {
-            self.poiResult(@[]);
+            self.poiResult(@[].mj_JSONString);
         }
         return;
     }
-    
-//    NSArray<AMapPOI *> *pois = response.pois;
-    ;
-//    NSError *error;
-//    NSData *data = [NSJSONSerialization dataWithJSONObject:pois options:NSJSONWritingPrettyPrinted error:&error];
-//    if (error) {
-//        if (self.poiResult) {
-//            self.poiResult(error.description);
-//        }
-//        return;
-//    }
-//    NSString *json = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
     NSArray *pois = [NSArray mj_keyValuesArrayWithObjectArray:response.pois];
     if (self.poiResult) {
-        self.poiResult(pois);
+        self.poiResult(pois.mj_JSONString);
+    }
+}
+
+/* 逆地理编码回调. */
+- (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
+    NSString *result = @"";
+    if (response.regeocode) {
+        result = [response.regeocode mj_JSONString];
+    }
+    if (self.reGeoResult) {
+        self.reGeoResult(result);
     }
 }
 
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error{
     if (self.poiResult) {
-        self.poiResult(error.description);
+        self.poiResult(@[].mj_JSONString);
     }
 }
 
