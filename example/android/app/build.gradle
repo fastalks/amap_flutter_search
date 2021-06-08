@@ -38,6 +38,10 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
+        }
     }
 
     buildTypes {
@@ -46,7 +50,25 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
+    signingConfigs {
+        debug {
+            keyAlias 'amap_flutter_search_debug'
+            keyPassword '123456'
+            storeFile file('/Users/wangfaguo/Desktop/project/flutter_test/amap_flutter_search_debug.keystore')
+            storePassword '123456'
+        }
+    }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.amap.api:3dmap:7.6.0'
+    implementation 'com.amap.api:location:4.9.0'
+    implementation 'com.amap.api:search:5.0.0'
 }
 
 flutter {

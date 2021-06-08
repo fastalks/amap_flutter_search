@@ -19,29 +19,34 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
-  // AMapFlutterLocation _locationPlugin = new AMapFlutterLocation();
+  AMapFlutterLocation _locationPlugin = new AMapFlutterLocation();
   @override
   void initState() {
     super.initState();
     AMapFlutterLocation.setApiKey(
-        "e300c95e81dbe1b40593ace788992973", "aea7b871e8b43d447d6f870bdaa45929");
+        "43c85c99e0ccb05317bb857ec593cdc1", "6c33f7d4111cb310890c057a95766004");
 
     initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+
     try {
-      List<AMapPOI?> pois = await AmapFlutterSearch.poiKeywords('海阳新村', '上海');
+      platformVersion = await AmapFlutterSearch.platformVersion;
+      List<AMapPOI?> pois = await AmapFlutterSearch.poiKeywords('西子国际', '上海');
 
       AMapReGeocode? regeo =
           await AmapFlutterSearch.reGoecodeSearch(31.15339, 121.494189);
       print("=============");
-      // print(pois);
+      print(pois);
       print(regeo?.pois?[0]?.name);
       print(regeo?.pois?[0]?.address);
       print("=============");
     } catch (e) {
+      platformVersion = 'error version';
       print("=============");
       print(e);
       print("=============");
@@ -52,7 +57,9 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    setState(() {});
+    setState(() {
+      _platformVersion = platformVersion;
+    });
   }
 
   @override

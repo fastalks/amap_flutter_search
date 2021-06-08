@@ -1,4 +1,4 @@
-group 'com.example.amap_flutter_search'
+group 'com.amap.amap_flutter_search'
 version '1.0'
 
 buildscript {
@@ -29,5 +29,9 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    dependencies {
+        compileOnly 'com.amap.api:search:5.0.0'
+        api 'com.google.code.gson:gson:2.8.7'
     }
 }

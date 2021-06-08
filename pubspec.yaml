@@ -1,5 +1,5 @@
 name: amap_flutter_search
-description: A new flutter plugin project.
+description: 基于高德地图的Flutter搜索插件.
 version: 0.0.1
 author: wangfaguo
 homepage: https://github.com/wangfaguo
@@ -32,7 +32,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.amap_flutter_search
+        package: com.amap.amap_flutter_search
         pluginClass: AmapFlutterSearchPlugin
       ios:
         pluginClass: AmapFlutterSearchPlugin
