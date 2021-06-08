@@ -2,6 +2,16 @@
 
 基于高德开放平台地图SDK的flutter插件(社区版)
 
+#  Usage 使用方法
+
+
+    List<AMapPOI?> pois = await AmapFlutterSearch.poiKeywords('keywords', 'city');
+
+
+    AMapReGeocode? regeo = await AmapFlutterSearch.reGoecodeSearch(latitude, longitude);
+    
+    
+    
 ## Getting Started
 
 This project is a starting point for a Flutter
